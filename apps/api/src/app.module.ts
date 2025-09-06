@@ -3,10 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { TenantsModule } from './tenants/tenants.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
+import { DeltaNeutralModule } from './delta-neutral/delta-neutral.module';
+import { BridgeModule } from './bridge/bridge.module';
+import { HyperliquidModule } from './hyperliquid/hyperliquid.module';
 import { User } from './users/user.entity';
-import { Tenant } from './tenants/tenant.entity';
-import { Invitation } from './tenants/invitation.entity';
+import { Portfolio } from './portfolio/entities/portfolio.entity';
+import { Position } from './delta-neutral/entities/position.entity';
+import { Alert } from './delta-neutral/entities/alert.entity';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
@@ -33,9 +37,12 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule,
     UsersModule,
-    TenantsModule,
+    PortfolioModule,
+    DeltaNeutralModule,
+    BridgeModule,
+    HyperliquidModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

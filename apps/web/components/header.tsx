@@ -1,44 +1,54 @@
-"use client"
+import Link from "next/link";
 
-import { NavBreadcrumb } from "@/components/nav-breadcrumb"
-import {
-    SidebarTrigger,
-} from "@workspace/ui/components/sidebar"
-import { Separator } from "@workspace/ui/components/separator"
-import { LogoutButton } from "@/components/logout-button"
+export default function Header() {
+  return (
+    <header className="bg-black border-b border-gray-800 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2">
+            <div className="text-2xl">🦔</div>
+            <span className="text-xl font-bold text-yellow-400">
+              Hedgehoge.hl
+            </span>
+          </Link>
 
-const navItems = [
-    {
-        title: "Home",
-        url: "/",
-        items: [
-            {
-                title: "Dashboard",
-                url: "/dashboard",
-            },
-            {
-                title: "Transactions",
-                url: "/transactions",
-            },
-        ],
-    },
-    {
-        title: "Settings",
-        url: "/settings",
-    },
-]
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/dashboard"
+              className="text-gray-300 hover:text-yellow-400 transition-colors"
+            >
+              대시보드
+            </Link>
+            <Link
+              href="/portfolio"
+              className="text-gray-300 hover:text-yellow-400 transition-colors"
+            >
+              포트폴리오
+            </Link>
+            <Link
+              href="/delta-neutral"
+              className="text-gray-300 hover:text-yellow-400 transition-colors"
+            >
+              델타 뉴트럴
+            </Link>
+            <Link
+              href="/bridge"
+              className="text-gray-300 hover:text-yellow-400 transition-colors"
+            >
+              브릿징
+            </Link>
+          </nav>
 
-export function Header() {
-    return (
-        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <div className="flex flex-1 items-center gap-2">
-                <SidebarTrigger className="-ml-2" />
-                <Separator orientation="vertical" className="h-6" />
-                <NavBreadcrumb items={navItems} />
-                <div className="ml-auto">
-                    <LogoutButton />
-                </div>
-            </div>
-        </header>
-    )
+          {/* Wallet Connection */}
+          <div className="flex items-center gap-4">
+            <button className="px-4 py-2 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors">
+              지갑 연결
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }
