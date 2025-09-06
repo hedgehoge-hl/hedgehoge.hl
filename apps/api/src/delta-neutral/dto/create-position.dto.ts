@@ -5,7 +5,7 @@ import {
   IsNumber,
   IsOptional,
 } from 'class-validator';
-import { PositionType } from '../entities/position.entity';
+import { PositionType } from '@/entities/position.entity';
 
 export class CreatePositionDto {
   @IsNumber()

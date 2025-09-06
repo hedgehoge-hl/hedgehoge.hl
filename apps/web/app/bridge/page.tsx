@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 interface Chain {
@@ -51,7 +51,7 @@ export default function BridgePage() {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchRoutes = async () => {
+  const fetchRoutes = useCallback(async () => {
     setIsLoading(true);
 
     // TODO: 실제 API 호출
@@ -91,13 +91,13 @@ export default function BridgePage() {
       ]);
       setIsLoading(false);
     }, 1000);
-  };
+  }, [chains, fromChain, toChain, fromToken, toToken, amount]);
 
   useEffect(() => {
     if (amount && parseFloat(amount) > 0) {
       fetchRoutes();
     }
-  }, [fromChain, toChain, fromToken, toToken, amount]);
+  }, [fromChain, toChain, fromToken, toToken, amount, fetchRoutes]);
 
   return (
     <div className="min-h-screen bg-black text-white p-6">

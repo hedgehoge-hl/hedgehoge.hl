@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -9,12 +9,11 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) { }
+  ) {}
 
   async findOne(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['tenant'],
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -26,7 +25,6 @@ export class UsersService {
     console.log('Looking up user by email:', email);
     const user = await this.usersRepository.findOne({
       where: { email },
-      relations: ['tenant'],
     });
     console.log('Found user:', user);
     if (!user) {
@@ -50,16 +48,10 @@ export class UsersService {
     return savedUser;
   }
 
-  async findByTenant(tenantId: string): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.usersRepository.find({
-      where: { tenantId },
-      select: ['id', 'email', 'roles', 'createdAt'],
+      select: ['id', 'email', 'name', 'bio', 'walletAddress', 'createdAt'],
     });
-  }
-
-  async updateRoles(userId: string, roles: string[]): Promise<User> {
-    await this.usersRepository.update(userId, { roles });
-    return this.findOne(userId);
   }
 
   async update(user: User): Promise<User> {

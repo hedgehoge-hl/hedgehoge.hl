@@ -106,7 +106,7 @@ export default function PortfolioPage() {
               총 자산 수
             </h3>
             <p className="text-2xl font-bold text-white">
-              {portfolio.assets.length}
+              {portfolio.assets?.length || 0}
             </p>
           </div>
 
@@ -129,10 +129,12 @@ export default function PortfolioPage() {
               최고 수익 자산
             </h3>
             <p className="text-2xl font-bold text-yellow-400">
-              {portfolio.assets.reduce(
-                (max, asset) => (asset.pnL > max.pnL ? asset : max),
-                portfolio.assets[0]
-              )?.symbol || "N/A"}
+              {portfolio.assets && portfolio.assets.length > 0
+                ? portfolio.assets.reduce(
+                    (max, asset) => (asset.pnL > max.pnL ? asset : max),
+                    portfolio.assets[0]!
+                  ).symbol
+                : "N/A"}
             </p>
           </div>
         </div>
@@ -168,7 +170,7 @@ export default function PortfolioPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {portfolio.assets.map((asset, index) => (
+                {portfolio.assets?.map((asset, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-800 transition-colors"
@@ -218,7 +220,7 @@ export default function PortfolioPage() {
                       {((asset.value / portfolio.totalValue) * 100).toFixed(1)}%
                     </td>
                   </tr>
-                ))}
+                )) || []}
               </tbody>
             </table>
           </div>

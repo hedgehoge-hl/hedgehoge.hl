@@ -7,10 +7,6 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { DeltaNeutralModule } from './delta-neutral/delta-neutral.module';
 import { BridgeModule } from './bridge/bridge.module';
 import { HyperliquidModule } from './hyperliquid/hyperliquid.module';
-import { User } from './users/user.entity';
-import { Portfolio } from './portfolio/entities/portfolio.entity';
-import { Position } from './delta-neutral/entities/position.entity';
-import { Alert } from './delta-neutral/entities/alert.entity';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
@@ -29,8 +25,7 @@ import { PassportModule } from '@nestjs/passport';
         database: configService.get('DB_DATABASE'),
         ssl: configService.get('DB_SSL') === 'true',
         autoLoadEntities: true,
-        synchronize: configService.get('NODE_ENV') !== 'production',
-        logging: configService.get('NODE_ENV') !== 'production',
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),

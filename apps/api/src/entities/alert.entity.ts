@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../../users/user.entity';
+import { User } from '@/entities/user.entity';
 
 export enum AlertType {
   LIQUIDATION_RISK = 'liquidation_risk',

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Position } from './entities/position.entity';
-import { Alert } from './entities/alert.entity';
+import { Position } from '@/entities/position.entity';
+import { Alert, AlertType } from '@/entities/alert.entity';
 import { PortfolioService } from '../portfolio/portfolio.service';
 import { HyperliquidService } from '../hyperliquid/hyperliquid.service';
 import { CreatePositionDto } from './dto/create-position.dto';
@@ -34,7 +34,7 @@ export class DeltaNeutralService {
     const longPositions =
       portfolio.positions?.filter((p) => p.type === 'long') || [];
     const totalLongValue = longPositions.reduce(
-      (sum, pos) => sum + pos.value,
+      (sum, pos) => sum + pos.size * pos.currentPrice,
       0,
     );
 
@@ -89,7 +89,7 @@ export class DeltaNeutralService {
     return this.positionRepository.save(position);
   }
 
-  async createAlert(walletAddress: string, type: string, message: string) {
+  async createAlert(walletAddress: string, type: AlertType, message: string) {
     const alert = this.alertRepository.create({
       walletAddress,
       type,

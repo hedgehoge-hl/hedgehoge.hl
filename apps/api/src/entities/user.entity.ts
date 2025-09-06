@@ -1,6 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Tenant } from '../tenants/tenant.entity';
 
 @Entity('users')
 export class User {
@@ -19,24 +24,26 @@ export class User {
   @Column({ nullable: true })
   name: string;
 
-  @ApiProperty({ example: 'Software engineer passionate about...', description: 'User bio' })
+  @ApiProperty({
+    example: 'Software engineer passionate about...',
+    description: 'User bio',
+  })
   @Column({ type: 'text', nullable: true })
   bio: string;
 
-  @ApiProperty({ example: 'https://example.com/avatar.jpg', description: 'User avatar URL' })
+  @ApiProperty({
+    example: 'https://example.com/avatar.jpg',
+    description: 'User avatar URL',
+  })
   @Column({ name: 'avatar_url', nullable: true })
   avatarUrl: string;
 
-  @ApiProperty({ example: ['admin'], description: 'User roles' })
-  @Column({ type: 'json', nullable: true })
-  roles: string[];
-
-  @Column({ name: 'tenant_id', nullable: true })
-  tenantId: string;
-
-  @ManyToOne(() => Tenant, tenant => tenant.users)
-  @JoinColumn({ name: 'tenant_id' })
-  tenant: Tenant;
+  @ApiProperty({
+    example: 'wallet_address_here',
+    description: 'User wallet address',
+  })
+  @Column({ name: 'wallet_address', nullable: true })
+  walletAddress: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -46,8 +53,5 @@ export class User {
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
-    if (!this.roles) {
-      this.roles = ['user'];
-    }
   }
 }

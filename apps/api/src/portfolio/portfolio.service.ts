@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Portfolio } from './entities/portfolio.entity';
+import { Portfolio } from '@/entities/portfolio.entity';
 import { HyperliquidService } from '../hyperliquid/hyperliquid.service';
 
 @Injectable()
