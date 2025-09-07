@@ -22,12 +22,6 @@ export default function Header() {
               대시보드
             </Link>
             <Link
-              href="/portfolio"
-              className="text-gray-300 hover:text-yellow-400 transition-colors"
-            >
-              포트폴리오
-            </Link>
-            <Link
               href="/delta-neutral"
               className="text-gray-300 hover:text-yellow-400 transition-colors"
             >

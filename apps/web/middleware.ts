@@ -1,6 +1,14 @@
-import { NextResponse } from 'next/server';
-import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from "next/server";
+// import { withAuth } from 'next-auth/middleware';
 
+// 임시로 인증 미들웨어 비활성화 - NextAuth 설정 완료 후 다시 활성화 예정
+export function middleware(req: any) {
+  // 모든 요청을 그대로 통과시킴
+  return NextResponse.next();
+}
+
+/* 
+// NextAuth 설정 완료 후 아래 코드로 교체
 export default withAuth(
     async function middleware(req) {
         try {
@@ -56,12 +64,13 @@ export default withAuth(
         },
     }
 );
+*/
 
 export const config = {
-    matcher: [
-        '/dashboard/:path*', 
-        '/profile/:path*', 
-        '/settings/:path*',
-        // Add other protected routes here
-    ],
+  matcher: [
+    "/dashboard/:path*",
+    "/profile/:path*",
+    "/settings/:path*",
+    // Add other protected routes here
+  ],
 };
