@@ -54,7 +54,7 @@ export default function BridgePage() {
   const fetchRoutes = useCallback(async () => {
     setIsLoading(true);
 
-    // TODO: 실제 API 호출
+    // TODO: Actual API call
     setTimeout(() => {
       setRoutes([
         {
@@ -64,7 +64,7 @@ export default function BridgePage() {
           fromToken,
           toToken,
           estimatedOutput: (parseFloat(amount) * 0.998).toFixed(2),
-          estimatedTime: "5-10분",
+          estimatedTime: "5-10 min",
           fees: "0.2%",
         },
         {
@@ -74,7 +74,7 @@ export default function BridgePage() {
           fromToken,
           toToken,
           estimatedOutput: (parseFloat(amount) * 0.9995).toFixed(2),
-          estimatedTime: "3-7분",
+          estimatedTime: "3-7 min",
           fees: "0.05%",
           apy: "12.5%",
         },
@@ -85,7 +85,7 @@ export default function BridgePage() {
           fromToken,
           toToken,
           estimatedOutput: (parseFloat(amount) * 0.999).toFixed(2),
-          estimatedTime: "10-15분",
+          estimatedTime: "10-15 min",
           fees: "0.1%",
         },
       ]);
@@ -109,12 +109,14 @@ export default function BridgePage() {
               href="/dashboard"
               className="text-yellow-400 hover:text-yellow-500 mb-2 inline-block"
             >
-              ← 대시보드로 돌아가기
+              ← Back to Dashboard
             </Link>
             <h1 className="text-3xl font-bold text-yellow-400">
-              브릿징 & 스왑
+              Bridge & Swap
             </h1>
-            <p className="text-gray-400 mt-2">자산 이동 및 최적 경로 안내</p>
+            <p className="text-gray-400 mt-2">
+              Asset transfer and optimal route guidance
+            </p>
           </div>
         </div>
 
@@ -122,7 +124,7 @@ export default function BridgePage() {
           {/* Bridge Form */}
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
             <h3 className="text-lg font-semibold text-white mb-6">
-              브릿지 설정
+              Bridge Settings
             </h3>
 
             <div className="space-y-6">
@@ -221,12 +223,14 @@ export default function BridgePage() {
 
           {/* Routes */}
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-            <h3 className="text-lg font-semibold text-white mb-6">최적 경로</h3>
+            <h3 className="text-lg font-semibold text-white mb-6">
+              Optimal Routes
+            </h3>
 
             {isLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-                <p className="text-gray-400">경로를 찾는 중...</p>
+                <p className="text-gray-400">Finding routes...</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -251,7 +255,7 @@ export default function BridgePage() {
                         )}
                         {index === 0 && (
                           <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-xs rounded-full">
-                            추천
+                            Recommended
                           </span>
                         )}
                       </div>
@@ -262,13 +266,13 @@ export default function BridgePage() {
 
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="text-sm text-gray-400">예상 수령량</p>
+                        <p className="text-sm text-gray-400">Expected Amount</p>
                         <p className="text-white font-medium">
                           {route.estimatedOutput} {route.toToken}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-400">수수료</p>
+                        <p className="text-sm text-gray-400">Fees</p>
                         <p className="text-white">{route.fees}</p>
                       </div>
                     </div>
@@ -279,7 +283,7 @@ export default function BridgePage() {
 
             {routes.length > 0 && !isLoading && (
               <button className="w-full mt-6 px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-500 transition-colors">
-                브릿지 실행
+                Execute Bridge
               </button>
             )}
           </div>
@@ -288,7 +292,7 @@ export default function BridgePage() {
         {/* Pendle Opportunities */}
         <div className="mt-8 bg-gray-900 p-6 rounded-lg border border-gray-800">
           <h3 className="text-lg font-semibold text-white mb-6">
-            🌾 Pendle 수익 기회
+            🌾 Pendle Yield Opportunities
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -301,7 +305,7 @@ export default function BridgePage() {
               </div>
               <div className="text-sm text-gray-400">
                 <p>TVL: $125M</p>
-                <p>만기: 2024-12-26</p>
+                <p>Maturity: 2024-12-26</p>
               </div>
             </div>
 
@@ -314,7 +318,7 @@ export default function BridgePage() {
               </div>
               <div className="text-sm text-gray-400">
                 <p>TVL: $89M</p>
-                <p>만기: 2024-06-27</p>
+                <p>Maturity: 2024-06-27</p>
               </div>
             </div>
 
@@ -327,7 +331,7 @@ export default function BridgePage() {
               </div>
               <div className="text-sm text-gray-400">
                 <p>TVL: $67M</p>
-                <p>만기: 2024-09-26</p>
+                <p>Maturity: 2024-09-26</p>
               </div>
             </div>
           </div>

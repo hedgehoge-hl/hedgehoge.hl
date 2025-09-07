@@ -34,7 +34,7 @@ export default function DeltaNeutralPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: API 호출로 실제 델타 뉴트럴 데이터 가져오기
+    // TODO: Fetch actual delta neutral data via API call
     setTimeout(() => {
       setData({
         currentLongValue: 85000,
@@ -98,7 +98,7 @@ export default function DeltaNeutralPage() {
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-          <p className="text-gray-400">델타 뉴트럴 데이터를 불러오는 중...</p>
+          <p className="text-gray-400">Loading delta neutral data...</p>
         </div>
       </div>
     );
@@ -114,12 +114,14 @@ export default function DeltaNeutralPage() {
               href="/dashboard"
               className="text-yellow-400 hover:text-yellow-500 mb-2 inline-block"
             >
-              ← 대시보드로 돌아가기
+              ← Back to Dashboard
             </Link>
             <h1 className="text-3xl font-bold text-yellow-400">
-              델타 뉴트럴 전략
+              Delta Neutral Strategy
             </h1>
-            <p className="text-gray-400 mt-2">포지션 밸런싱 및 리스크 관리</p>
+            <p className="text-gray-400 mt-2">
+              Position balancing and risk management
+            </p>
           </div>
         </div>
 
@@ -127,7 +129,7 @@ export default function DeltaNeutralPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
             <h3 className="text-sm font-medium text-gray-400 mb-2">
-              현재 롱 포지션 가치
+              Current Long Position Value
             </h3>
             <p className="text-2xl font-bold text-white">
               ${data.currentLongValue.toLocaleString()}
@@ -136,7 +138,7 @@ export default function DeltaNeutralPage() {
 
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
             <h3 className="text-sm font-medium text-gray-400 mb-2">
-              추천 숏 포지션
+              Recommended Short Position
             </h3>
             <p className="text-2xl font-bold text-yellow-400">
               ${data.recommendedShortSize.toLocaleString()}
@@ -145,7 +147,7 @@ export default function DeltaNeutralPage() {
 
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
             <h3 className="text-sm font-medium text-gray-400 mb-2">
-              헤지 비율
+              Hedge Ratio
             </h3>
             <p className="text-2xl font-bold text-white">
               {(data.hedgeRatio * 100).toFixed(1)}%
@@ -154,7 +156,7 @@ export default function DeltaNeutralPage() {
 
           <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
             <h3 className="text-sm font-medium text-gray-400 mb-2">
-              델타 뉴트럴 PnL
+              Delta Neutral PnL
             </h3>
             <p
               className={`text-2xl font-bold ${data.totalPnL >= 0 ? "text-green-400" : "text-red-400"}`}
@@ -169,15 +171,16 @@ export default function DeltaNeutralPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-yellow-400 mb-2">
-                리밸런싱 추천
+                Rebalancing Recommendation
               </h3>
               <p className="text-gray-300">
-                현재 헤지 비율이 {(data.hedgeRatio * 100).toFixed(1)}%입니다.
-                최적의 델타 뉴트럴을 위해 추가 숏 포지션을 고려해보세요.
+                Current hedge ratio is {(data.hedgeRatio * 100).toFixed(1)}%.
+                Consider additional short positions for optimal delta
+                neutrality.
               </p>
             </div>
             <button className="px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-500 transition-colors">
-              자동 리밸런싱
+              Auto Rebalancing
             </button>
           </div>
         </div>
@@ -185,7 +188,9 @@ export default function DeltaNeutralPage() {
         {/* Positions Table */}
         <div className="bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-800">
-            <h3 className="text-lg font-semibold text-white">현재 포지션</h3>
+            <h3 className="text-lg font-semibold text-white">
+              Current Positions
+            </h3>
           </div>
 
           <div className="overflow-x-auto">
@@ -193,28 +198,28 @@ export default function DeltaNeutralPage() {
               <thead className="bg-gray-800">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    자산
+                    Asset
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    타입
+                    Type
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    사이즈
+                    Size
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    진입가
+                    Entry Price
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    현재가
+                    Current Price
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     PnL
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    청산가
+                    Liquidation Price
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    리스크
+                    Risk
                   </th>
                 </tr>
               </thead>
@@ -283,15 +288,16 @@ export default function DeltaNeutralPage() {
         {/* Risk Alerts */}
         <div className="mt-8 bg-red-900/20 border border-red-400 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-red-400 mb-4">
-            ⚠️ 리스크 알림
+            ⚠️ Risk Alerts
           </h3>
           <div className="space-y-2">
             <p className="text-gray-300">
-              • ETH-PERP 숏 포지션의 청산가가 현재가 대비 18.7% 상승한 지점에
-              있습니다.
+              • ETH-PERP short position liquidation price is 18.7% above current
+              price.
             </p>
             <p className="text-gray-300">
-              • 펀딩비가 양수로 전환되어 숏 포지션에 불리한 상황입니다.
+              • Funding rate has turned positive, creating unfavorable
+              conditions for short positions.
             </p>
           </div>
         </div>

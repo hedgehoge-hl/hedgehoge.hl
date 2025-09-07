@@ -8,9 +8,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="text-2xl">🦔</div>
-            <span className="text-xl font-bold text-yellow-400">
-              Hedgehoge.hl
-            </span>
+            <span className="text-xl font-bold text-yellow-400">Hedgehog</span>
           </Link>
 
           {/* Navigation */}
@@ -19,26 +17,26 @@ export default function Header() {
               href="/dashboard"
               className="text-gray-300 hover:text-yellow-400 transition-colors"
             >
-              대시보드
+              Dashboard
             </Link>
             <Link
               href="/delta-neutral"
               className="text-gray-300 hover:text-yellow-400 transition-colors"
             >
-              델타 뉴트럴
+              Delta Neutral
             </Link>
             <Link
               href="/bridge"
               className="text-gray-300 hover:text-yellow-400 transition-colors"
             >
-              브릿징
+              Bridge
             </Link>
           </nav>
 
           {/* Wallet Connection */}
           <div className="flex items-center gap-4">
             <button className="px-4 py-2 bg-yellow-400 text-black font-medium rounded-lg hover:bg-yellow-500 transition-colors">
-              지갑 연결
+              Connect Wallet
             </button>
           </div>
         </div>

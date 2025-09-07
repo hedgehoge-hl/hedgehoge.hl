@@ -11,63 +11,63 @@ import {
   Shield,
 } from "lucide-react";
 
-// 체인 타입
+// Chain type
 type Chain = "Ethereum" | "HyperEVM" | "HyperCore" | "Base";
 
-// 자산 심볼
+// Asset symbol
 type AssetSymbol = "HYPE" | "BTC" | "ETH" | "ENA" | "KAITO";
 
-// 롱 포지션 자산 형태
+// Long position asset form
 interface LongAssetForm {
-  type: string; // pt-kHYPE, vKHYPE, HYPE, stETH, pt-stETH 등
-  percentage: number; // 해당 형태가 차지하는 비율
-  balance: number; // 실제 보유 수량
-  valueInBase: number; // 베이스 자산으로 환산한 가치 (USD)
-  expectedAPR: number; // 기대 APR
-  liquidity: number; // 유동성 수준 (0-100%)
+  type: string; // pt-kHYPE, vKHYPE, HYPE, stETH, pt-stETH etc
+  percentage: number; // Percentage of this form
+  balance: number; // Actual holding amount
+  valueInBase: number; // Value converted to base asset (USD)
+  expectedAPR: number; // Expected APR
+  liquidity: number; // Liquidity level (0-100%)
 }
 
-// 롱 포지션 정보
+// Long position info
 interface LongPosition {
   chain: Chain;
   forms: LongAssetForm[];
   totalValue: number;
-  totalAPR: number; // 가중평균 APR
-  averageLiquidity: number; // 평균 유동성
+  totalAPR: number; // Weighted average APR
+  averageLiquidity: number; // Average liquidity
 }
 
-// 숏 포지션 정보
+// Short position info
 interface ShortPosition {
-  leverage: number; // 레버리지 배수
-  entryPrice: number; // 진입가격
-  currentPrice: number; // 현재가격
-  liquidationPrice: number; // 청산가격
-  liquidationRisk: number; // 청산 리스크 (0-100%)
-  fundingRate: number; // 펀딩레이트 (시간당)
-  expectedAPR: number; // 펀딩 기반 예상 APR
-  notionalValue: number; // 명목 가치
-  collateral: number; // 담보
-  unrealizedPnL: number; // 미실현 손익
+  leverage: number; // Leverage multiplier
+  entryPrice: number; // Entry price
+  currentPrice: number; // Current price
+  liquidationPrice: number; // Liquidation price
+  liquidationRisk: number; // Liquidation risk (0-100%)
+  fundingRate: number; // Funding rate (per hour)
+  expectedAPR: number; // Funding-based expected APR
+  notionalValue: number; // Notional value
+  collateral: number; // Collateral
+  unrealizedPnL: number; // Unrealized PnL
 }
 
-// 각 자산의 델타 중립 포트폴리오
+// Delta neutral portfolio for each asset
 interface DeltaNeutralAsset {
   symbol: AssetSymbol;
-  spotValue: number; // 스팟(롱) 총 가치
-  perpValue: number; // 선물(숏) 총 가치
-  delta: number; // 델타 % (-100 ~ 100, 0이 완전 중립)
+  spotValue: number; // Total spot (long) value
+  perpValue: number; // Total futures (short) value
+  delta: number; // Delta % (-100 ~ 100, 0 is perfectly neutral)
   longPositions: LongPosition[];
   shortPosition: ShortPosition | null;
-  totalAPR: number; // 전체 기대 APR (롱 APR - 숏 비용 or + 숏 수익)
+  totalAPR: number; // Total expected APR (long APR - short cost or + short profit)
 }
 
-// 전체 포트폴리오 데이터
+// Overall portfolio data
 interface PortfolioData {
   totalValue: number;
   totalSpotValue: number;
   totalPerpValue: number;
-  overallDelta: number; // 전체 포트폴리오 델타
-  overallAPR: number; // 전체 포트폴리오 APR
+  overallDelta: number; // Overall portfolio delta
+  overallAPR: number; // Overall portfolio APR
   assets: DeltaNeutralAsset[];
 }
 
@@ -84,13 +84,13 @@ export default function DashboardPage() {
   const [selectedAsset, setSelectedAsset] = useState<AssetSymbol | null>(null);
 
   useEffect(() => {
-    // TODO: API 호출로 실제 포트폴리오 데이터 가져오기
+    // TODO: Fetch actual portfolio data via API call
     setTimeout(() => {
       setPortfolio({
         totalValue: 500000,
         totalSpotValue: 250000,
         totalPerpValue: 250000,
-        overallDelta: 2.5, // 약간 롱 바이어스
+        overallDelta: 2.5, // Slight long bias
         overallAPR: 18.5,
         assets: [
           {
@@ -160,7 +160,7 @@ export default function DashboardPage() {
               collateral: 39200,
               unrealizedPnL: -784,
             },
-            totalAPR: 26.01, // 롱 APR + 숏 펀딩 수익
+            totalAPR: 26.01, // Long APR + short funding profit
           },
           {
             symbol: "ENA",
@@ -348,28 +348,28 @@ export default function DashboardPage() {
     }, 1000);
   }, []);
 
-  // 델타 색상 결정
+  // Determine delta color
   const getDeltaColor = (delta: number) => {
     if (Math.abs(delta) < 1) return "text-green-400";
     if (Math.abs(delta) < 5) return "text-yellow-400";
     return "text-red-400";
   };
 
-  // 리스크 레벨 색상
+  // Risk level color
   const getRiskColor = (risk: number) => {
     if (risk < 20) return "text-green-400";
     if (risk < 50) return "text-yellow-400";
     return "text-red-400";
   };
 
-  // 리스크 레벨 텍스트
+  // Risk level text
   const getRiskLevel = (risk: number) => {
-    if (risk < 20) return "낮음";
-    if (risk < 50) return "보통";
-    return "높음";
+    if (risk < 20) return "Low";
+    if (risk < 50) return "Medium";
+    return "High";
   };
 
-  // 리스크 레벨 배경색
+  // Risk level background color
   const getRiskBgColor = (risk: number) => {
     if (risk < 20) return "bg-green-900/30 border-green-500/30";
     if (risk < 50) return "bg-yellow-900/30 border-yellow-500/30";
@@ -381,7 +381,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-          <p className="text-gray-400">대시보드 데이터를 불러오는 중...</p>
+          <p className="text-gray-400">Loading dashboard data...</p>
         </div>
       </div>
     );
@@ -394,14 +394,14 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-yellow-400">
-              델타 중립 대시보드
+              Delta Neutral Dashboard
             </h1>
             <p className="text-gray-400 text-sm mt-1">
-              자산별 델타 헤지 현황 및 수익률 분석
+              Asset-wise delta hedging status and yield analysis
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs text-gray-400">총 포트폴리오 가치</p>
+            <p className="text-xs text-gray-400">Total Portfolio Value</p>
             <p className="text-xl font-bold text-white">
               ${portfolio.totalValue.toLocaleString()}
             </p>
@@ -424,7 +424,7 @@ export default function DashboardPage() {
           <div className="bg-gray-900 p-3 rounded-lg border border-gray-800">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-xs font-medium text-gray-400">
-                총 롱 포지션
+                Total Long Position
               </h3>
               <ArrowUpRight className="w-3 h-3 text-green-400" />
             </div>
@@ -443,7 +443,7 @@ export default function DashboardPage() {
           <div className="bg-gray-900 p-3 rounded-lg border border-gray-800">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-xs font-medium text-gray-400">
-                총 숏 포지션
+                Total Short Position
               </h3>
               <ArrowDownRight className="w-3 h-3 text-red-400" />
             </div>
@@ -462,7 +462,7 @@ export default function DashboardPage() {
           <div className="bg-gray-900 p-3 rounded-lg border border-gray-800">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-xs font-medium text-gray-400">
-                포트폴리오 델타
+                Portfolio Delta
               </h3>
               <Shield className="w-3 h-3 text-yellow-400" />
             </div>
@@ -474,24 +474,24 @@ export default function DashboardPage() {
             </p>
             <p className="text-xs text-gray-500">
               {Math.abs(portfolio.overallDelta) < 1
-                ? "완벽한 중립"
+                ? "Perfect Neutral"
                 : Math.abs(portfolio.overallDelta) < 5
-                  ? "거의 중립"
-                  : "조정 필요"}
+                  ? "Nearly Neutral"
+                  : "Needs Adjustment"}
             </p>
           </div>
 
           <div className="bg-gray-900 p-3 rounded-lg border border-gray-800">
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-xs font-medium text-gray-400">
-                예상 연간 수익률
+                Expected Annual Yield
               </h3>
               <TrendingUp className="w-3 h-3 text-green-400" />
             </div>
             <p className="text-lg font-bold text-green-400">
               {portfolio.overallAPR.toFixed(2)}%
             </p>
-            <p className="text-xs text-gray-500">펀딩 + 스테이킹 수익</p>
+            <p className="text-xs text-gray-500">Funding + Staking Rewards</p>
           </div>
         </div>
 
@@ -533,7 +533,7 @@ export default function DashboardPage() {
                     }
                     className="text-gray-400 hover:text-white transition-colors text-xs"
                   >
-                    {selectedAsset === asset.symbol ? "접기 ▲" : "펼치기 ▼"}
+                    {selectedAsset === asset.symbol ? "Collapse ▲" : "Expand ▼"}
                   </button>
                 </div>
               </div>
@@ -541,19 +541,19 @@ export default function DashboardPage() {
               {/* Asset Summary */}
               <div className="px-4 py-3 grid grid-cols-2 md:grid-cols-5 gap-3">
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">롱 포지션</p>
+                  <p className="text-xs text-gray-400 mb-0.5">Long Position</p>
                   <p className="text-sm font-medium text-white">
                     ${asset.spotValue.toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">숏 포지션</p>
+                  <p className="text-xs text-gray-400 mb-0.5">Short Position</p>
                   <p className="text-sm font-medium text-white">
                     ${asset.perpValue.toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">델타 노출</p>
+                  <p className="text-xs text-gray-400 mb-0.5">Delta Exposure</p>
                   <p
                     className={`text-sm font-medium ${getDeltaColor(asset.delta)}`}
                   >
@@ -562,7 +562,7 @@ export default function DashboardPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">리스크 레벨</p>
+                  <p className="text-xs text-gray-400 mb-0.5">Risk Level</p>
                   {asset.shortPosition ? (
                     <div
                       className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium border ${getRiskBgColor(asset.shortPosition.liquidationRisk)}`}
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                   )}
                 </div>
                 <div>
-                  <p className="text-xs text-gray-400 mb-0.5">순 APR</p>
+                  <p className="text-xs text-gray-400 mb-0.5">Net APR</p>
                   <p className="text-sm font-medium text-green-400">
                     {asset.totalAPR.toFixed(2)}%
                   </p>
@@ -593,8 +593,8 @@ export default function DashboardPage() {
                   {/* Long Positions Detail */}
                   <div className="p-4">
                     <h4 className="text-xs font-semibold text-gray-300 mb-3 flex items-center gap-1">
-                      <ArrowUpRight className="w-3 h-3 text-green-400" />롱
-                      포지션 상세
+                      <ArrowUpRight className="w-3 h-3 text-green-400" />
+                      Long Position Details
                     </h4>
                     {asset.longPositions.map((longPos, idx) => (
                       <div
@@ -658,14 +658,14 @@ export default function DashboardPage() {
                   {asset.shortPosition && (
                     <div className="p-4 border-t border-gray-800">
                       <h4 className="text-xs font-semibold text-gray-300 mb-3 flex items-center gap-1">
-                        <ArrowDownRight className="w-3 h-3 text-red-400" />숏
-                        포지션 상세
+                        <ArrowDownRight className="w-3 h-3 text-red-400" />
+                        Short Position Details
                       </h4>
                       <div className="bg-gray-800 rounded-lg p-3">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              레버리지
+                              Leverage
                             </p>
                             <p className="text-xs font-medium text-white">
                               {asset.shortPosition.leverage}x
@@ -673,7 +673,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              진입가 / 현재가
+                              Entry / Current Price
                             </p>
                             <p className="text-xs font-medium text-white">
                               ${asset.shortPosition.entryPrice} / $
@@ -682,7 +682,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              청산가
+                              Liquidation Price
                             </p>
                             <p className="text-xs font-medium text-red-400">
                               ${asset.shortPosition.liquidationPrice}
@@ -690,7 +690,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5 flex items-center gap-0.5">
-                              청산 리스크{" "}
+                              Liquidation Risk{" "}
                               <AlertTriangle className="w-2.5 h-2.5" />
                             </p>
                             <p
@@ -701,7 +701,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              펀딩레이트 (8h)
+                              Funding Rate (8h)
                             </p>
                             <p
                               className={`text-xs font-medium ${asset.shortPosition.fundingRate > 0 ? "text-red-400" : "text-green-400"}`}
@@ -715,7 +715,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              예상 APR
+                              Expected APR
                             </p>
                             <p
                               className={`text-xs font-medium ${asset.shortPosition.expectedAPR > 0 ? "text-green-400" : "text-red-400"}`}
@@ -726,7 +726,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              담보 / 명목가치
+                              Collateral / Notional
                             </p>
                             <p className="text-xs font-medium text-white">
                               ${asset.shortPosition.collateral.toLocaleString()}{" "}
@@ -736,7 +736,7 @@ export default function DashboardPage() {
                           </div>
                           <div>
                             <p className="text-xs text-gray-400 mb-0.5">
-                              미실현 손익
+                              Unrealized PnL
                             </p>
                             <p
                               className={`text-xs font-medium ${asset.shortPosition.unrealizedPnL >= 0 ? "text-green-400" : "text-red-400"}`}
@@ -764,16 +764,16 @@ export default function DashboardPage() {
             href="/delta-neutral"
             className="px-4 py-2 bg-yellow-400 text-black font-medium text-sm rounded-lg hover:bg-yellow-500 transition-colors"
           >
-            델타 조정하기
+            Adjust Delta
           </Link>
           <Link
             href="/bridge"
             className="px-4 py-2 border border-yellow-400 text-yellow-400 font-medium text-sm rounded-lg hover:bg-yellow-400 hover:text-black transition-colors"
           >
-            자산 브릿징
+            Bridge Assets
           </Link>
           <button className="px-4 py-2 border border-gray-600 text-gray-400 font-medium text-sm rounded-lg hover:bg-gray-900 hover:text-white transition-colors">
-            리밸런싱 실행
+            Execute Rebalancing
           </button>
         </div>
       </div>

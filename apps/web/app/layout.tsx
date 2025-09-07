@@ -21,12 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <title>Hedgehoge.hl - Hyperliquid 델타 뉴트럴 대시보드</title>
+        <title>Hedgehog - Hedge Your Yield</title>
         <meta
           name="description"
-          content="Hyperliquid 기반 델타 뉴트럴 전략 대시보드"
+          content="Hedge your assets, maximize your yield while staying neutral"
         />
       </head>
       <body
