@@ -8,6 +8,7 @@ import { DeltaNeutralModule } from './delta-neutral/delta-neutral.module';
 import { BridgeModule } from './bridge/bridge.module';
 import { HyperliquidModule } from './hyperliquid/hyperliquid.module';
 import { PassportModule } from '@nestjs/passport';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { PassportModule } from '@nestjs/passport';
     BridgeModule,
     HyperliquidModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
