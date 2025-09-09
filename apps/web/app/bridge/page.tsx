@@ -2,6 +2,24 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@workspace/ui/components/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
+import InputNumber from "@/components/input-number";
+import { Label } from "@workspace/ui/components/label";
+import { Button } from "@workspace/ui/components/button";
+import { ArrowDownUpIcon } from "lucide-react";
 
 interface Chain {
   id: string;
@@ -100,242 +118,251 @@ export default function BridgePage() {
   }, [fromChain, toChain, fromToken, toToken, amount, fetchRoutes]);
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <Link
-              href="/dashboard"
-              className="text-yellow-400 hover:text-yellow-500 mb-2 inline-block"
-            >
-              ← Back to Dashboard
-            </Link>
-            <h1 className="text-3xl font-bold text-yellow-400">
-              Bridge & Swap
-            </h1>
-            <p className="text-gray-400 mt-2">
-              Asset transfer and optimal route guidance
-            </p>
-          </div>
+    <div className="min-h-screen">
+      {/* Header Content */}
+      <div className="flex justify-between items-center mb-8">
+        <div className="p-4">
+          <Link
+            href="/dashboard"
+            className="text-muted-foreground text-sm hover:text-primary mb-2 inline-block"
+          >
+            ← Back to Dashboard
+          </Link>
+          <h1 className="text-3xl font-bold text-primary">Bridge & Swap</h1>
+          <p className="text-muted-foreground mt-2">
+            Asset transfer and optimal route guidance
+          </p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      </div>
+      <div className="mx-auto px-4 space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Bridge Form */}
-          <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-            <h3 className="text-lg font-semibold text-white mb-6">
-              Bridge Settings
-            </h3>
-
-            <div className="space-y-6">
-              {/* From Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  From
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <select
-                    value={fromChain}
-                    onChange={(e) => setFromChain(e.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-400"
-                  >
-                    {chains.map((chain) => (
-                      <option key={chain.id} value={chain.id}>
-                        {chain.name}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={fromToken}
-                    onChange={(e) => setFromToken(e.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-400"
-                  >
-                    {tokens.map((token) => (
-                      <option key={token.symbol} value={token.symbol}>
-                        {token.symbol}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Amount */}
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  Amount
-                </label>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0.00"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-400"
-                />
-              </div>
-
-              {/* Swap Button */}
-              <div className="flex justify-center">
-                <button
-                  onClick={() => {
-                    setFromChain(toChain);
-                    setToChain(fromChain);
-                    setFromToken(toToken);
-                    setToToken(fromToken);
-                  }}
-                  className="p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors"
-                >
-                  ↕️
-                </button>
-              </div>
-
-              {/* To Section */}
-              <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
-                  To
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <select
-                    value={toChain}
-                    onChange={(e) => setToChain(e.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-400"
-                  >
-                    {chains.map((chain) => (
-                      <option key={chain.id} value={chain.id}>
-                        {chain.name}
-                      </option>
-                    ))}
-                  </select>
-                  <select
-                    value={toToken}
-                    onChange={(e) => setToToken(e.target.value)}
-                    className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-yellow-400"
-                  >
-                    {tokens.map((token) => (
-                      <option key={token.symbol} value={token.symbol}>
-                        {token.symbol}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Routes */}
-          <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
-            <h3 className="text-lg font-semibold text-white mb-6">
-              Optimal Routes
-            </h3>
-
-            {isLoading ? (
-              <div className="text-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-                <p className="text-gray-400">Finding routes...</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {routes.map((route, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 rounded-lg border transition-colors cursor-pointer hover:border-yellow-400 ${
-                      index === 0
-                        ? "border-yellow-400 bg-yellow-400/5"
-                        : "border-gray-700"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-white">
-                          {route.provider}
-                        </span>
-                        {route.apy && (
-                          <span className="px-2 py-1 bg-green-400/10 text-green-400 text-xs rounded-full">
-                            APY {route.apy}
-                          </span>
-                        )}
-                        {index === 0 && (
-                          <span className="px-2 py-1 bg-yellow-400/10 text-yellow-400 text-xs rounded-full">
-                            Recommended
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-sm text-gray-400">
-                        {route.estimatedTime}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-sm text-gray-400">Expected Amount</p>
-                        <p className="text-white font-medium">
-                          {route.estimatedOutput} {route.toToken}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm text-gray-400">Fees</p>
-                        <p className="text-white">{route.fees}</p>
-                      </div>
-                    </div>
+          <Card showCornerIcons className="p-2">
+            <CardHeader>
+              <CardTitle>Bridge Settings</CardTitle>
+              <CardDescription>
+                Set the source and destination chains and tokens for the bridge.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {/* From Section */}
+                <div>
+                  <Label className="mb-2">From</Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Select value={fromChain} onValueChange={setFromChain}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Chain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {chains.map((chain) => (
+                          <SelectItem key={chain.id} value={chain.id}>
+                            {chain.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select value={fromToken} onValueChange={setFromToken}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Token" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {tokens.map((token) => (
+                          <SelectItem key={token.symbol} value={token.symbol}>
+                            {token.symbol}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
 
-            {routes.length > 0 && !isLoading && (
-              <button className="w-full mt-6 px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-500 transition-colors">
-                Execute Bridge
-              </button>
-            )}
-          </div>
+                {/* Amount */}
+                <div>
+                  <InputNumber
+                    label="Amount"
+                    placeholder="0.00"
+                    value={amount}
+                    onChange={setAmount}
+                    currency={fromToken}
+                    currencySymbol="$"
+                  />
+                </div>
+
+                {/* Swap Button */}
+                <div className="flex justify-center">
+                  <Button
+                    onClick={() => {
+                      setFromChain(toChain);
+                      setToChain(fromChain);
+                      setFromToken(toToken);
+                      setToToken(fromToken);
+                    }}
+                    variant="outline"
+                  >
+                    <ArrowDownUpIcon className="w-4 h-4" />
+                  </Button>
+                </div>
+
+                {/* To Section */}
+                <div>
+                  <Label className="mb-2">To</Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Select value={toChain} onValueChange={setToChain}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Chain" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {chains.map((chain) => (
+                          <SelectItem key={chain.id} value={chain.id}>
+                            {chain.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select value={toToken} onValueChange={setToToken}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Token" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {tokens.map((token) => (
+                          <SelectItem key={token.symbol} value={token.symbol}>
+                            {token.symbol}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Optimal Routes */}
+          <Card showCornerIcons className="p-2">
+            <CardHeader>
+              <CardTitle>Optimal Routes</CardTitle>
+              <CardDescription>
+                Find the optimal routes for your bridge.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                  <p className="text-muted-foreground">Finding routes...</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {routes.map((route, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-lg border transition-colors cursor-pointer hover:border-primary ${
+                        index === 0
+                          ? "border-primary bg-primary/5"
+                          : "border-input"
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-foreground">
+                            {route.provider}
+                          </span>
+                          {route.apy && (
+                            <span className="px-2 py-1 bg-green-400/10 text-green-400 text-xs rounded-full">
+                              APY {route.apy}
+                            </span>
+                          )}
+                          {index === 0 && (
+                            <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
+                              Recommended
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {route.estimatedTime}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-sm text-muted-foreground">
+                            Expected Amount
+                          </p>
+                          <p className="text-foreground font-medium">
+                            {route.estimatedOutput} {route.toToken}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-muted-foreground">Fees</p>
+                          <p className="text-foreground">{route.fees}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {routes.length > 0 && !isLoading && (
+                <Button className="w-full mt-6" size="lg">
+                  Execute Bridge
+                </Button>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         {/* Pendle Opportunities */}
-        <div className="mt-8 bg-gray-900 p-6 rounded-lg border border-gray-800">
-          <h3 className="text-lg font-semibold text-white mb-6">
-            🌾 Pendle Yield Opportunities
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-gray-800 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium text-white">
-                  PT-stETH-26DEC2024
-                </span>
-                <span className="text-green-400 font-bold">15.2% APY</span>
+        <Card showCornerIcons className="p-2">
+          <CardHeader>
+            <CardTitle>Pendle Yield Opportunities</CardTitle>
+            <CardDescription>
+              Find the optimal routes for your bridge.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-input rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-foreground">
+                    PT-stETH-26DEC2024
+                  </span>
+                  <span className="text-green-400 font-bold">15.2% APY</span>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <p>TVL: $125M</p>
+                  <p>Maturity: 2024-12-26</p>
+                </div>
               </div>
-              <div className="text-sm text-gray-400">
-                <p>TVL: $125M</p>
-                <p>Maturity: 2024-12-26</p>
+
+              <div className="p-4 bg-input rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-foreground">
+                    PT-ezETH-27JUN2024
+                  </span>
+                  <span className="text-green-400 font-bold">18.7% APY</span>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <p>TVL: $89M</p>
+                  <p>Maturity: 2024-06-27</p>
+                </div>
+              </div>
+
+              <div className="p-4 bg-input rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-white">
+                    PT-weETH-26SEP2024
+                  </span>
+                  <span className="text-green-400 font-bold">13.4% APY</span>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  <p>TVL: $67M</p>
+                  <p>Maturity: 2024-09-26</p>
+                </div>
               </div>
             </div>
-
-            <div className="p-4 bg-gray-800 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium text-white">
-                  PT-ezETH-27JUN2024
-                </span>
-                <span className="text-green-400 font-bold">18.7% APY</span>
-              </div>
-              <div className="text-sm text-gray-400">
-                <p>TVL: $89M</p>
-                <p>Maturity: 2024-06-27</p>
-              </div>
-            </div>
-
-            <div className="p-4 bg-gray-800 rounded-lg">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-medium text-white">
-                  PT-weETH-26SEP2024
-                </span>
-                <span className="text-green-400 font-bold">13.4% APY</span>
-              </div>
-              <div className="text-sm text-gray-400">
-                <p>TVL: $67M</p>
-                <p>Maturity: 2024-09-26</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

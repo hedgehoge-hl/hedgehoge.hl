@@ -42,9 +42,9 @@ export default function RootLayout({
               <div className="w-px bg-border absolute -z-0 right-2 sm:right-4 md:right-6 h-full inset-y-0" />
               <div className="w-px bg-border absolute -z-0 left-2 sm:left-4 md:left-6 h-full inset-y-0" />
 
-              <div className="relative z-5 h-full flex flex-col py-4 md:py-6 -mx-2">
+              <div className="relative z-5 h-full flex flex-col py-2 md:py-6 -mx-2">
                 <Header />
-                <div className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar">
+                <div className="flex-1 overflow-y-auto scroll-smooth custom-scrollbar scrolling">
                   {children}
                 </div>
               </div>

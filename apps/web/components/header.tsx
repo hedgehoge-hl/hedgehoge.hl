@@ -6,6 +6,7 @@ import {
   NavigationMenuLink,
 } from "@workspace/ui/components/navigation-menu";
 import { Button } from "@workspace/ui/components/button";
+import { AnimatedThemeToggler } from "@workspace/ui/components/animated-theme-toggler";
 
 const navigationLinks = [
   { href: "/dashboard", label: "Dashboard" },
@@ -30,13 +31,13 @@ export default function Header() {
           </div>
         </Link>
         <div className="flex justify-between items-center">
-          <NavigationMenu className="max-md:hidden pl-2">
-            <NavigationMenuList className="gap-2">
+          <NavigationMenu className="max-md:hidden pl-2 mt-1">
+            <NavigationMenuList className="gap-1">
               {navigationLinks.map((link, index) => (
                 <NavigationMenuItem key={index}>
                   <NavigationMenuLink
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary p-2 hover:bg-muted py-1.5 font-medium"
+                    className="text-muted-foreground hover:text-primary p-2 bg-muted hover:bg-primary/10 py-1.5 font-medium"
                   >
                     {link.label}
                   </NavigationMenuLink>
@@ -48,7 +49,8 @@ export default function Header() {
       </div>
 
       {/* Wallet Connection */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
+        <AnimatedThemeToggler />
         <Button variant="default" size="lg">
           Connect Wallet
         </Button>
